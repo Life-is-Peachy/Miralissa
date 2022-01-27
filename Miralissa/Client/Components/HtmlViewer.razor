@@ -1,0 +1,25 @@
+﻿<MudDialog Style="max-width: 100em;">
+	<DialogContent>
+		<MudContainer Style="max-height: 50em; overflow-y: scroll">
+			<MudText tabindex="2">
+				@((MarkupString)Html)
+			</MudText>
+		</MudContainer>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Ok">Понятно</MudButton>
+	</DialogActions>
+</MudDialog>
+
+
+@code {
+	[CascadingParameter] MudDialogInstance Dialog { get; set; }
+
+	[Parameter] public string Html { get; set; }
+
+
+	private void Ok()
+	{
+		Dialog.Close();
+	}
+}

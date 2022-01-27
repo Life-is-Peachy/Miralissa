@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Miralissa.Client.Pages
+
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                Authorizing...
+            </Authorizing>
+            <NotAuthorized>
+                <RedirectToChallenge />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>

@@ -1,0 +1,27 @@
+﻿<MudDialog>
+	<DialogContent>
+		<MudTextField @bind-Value="_cadastral" Label="Amount" Variant="Variant.Text" />
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">Отмена</MudButton>
+		<MudButton OnClick="Ok">Принять</MudButton>
+	</DialogActions>
+</MudDialog>
+
+
+@code {
+	string _cadastral;
+
+	[CascadingParameter] MudDialogInstance Dialog { get; set; }
+
+
+	void Cancel()
+	{
+		Dialog.Cancel();
+	}
+
+	void Ok()
+	{
+		Dialog.Close(DialogResult.Ok(_cadastral));
+	}
+}

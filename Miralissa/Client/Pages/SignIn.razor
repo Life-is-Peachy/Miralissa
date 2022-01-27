@@ -1,0 +1,31 @@
+﻿@namespace Miralissa.Client.Pages
+@layout ChallengeLayout
+@page "/signin"
+@using FluentValidation
+
+<MudGrid>
+	<MudItem xs="6" Class="d-flex align-center flex-column">
+		<MudIcon Icon="@Icons.Material.Filled.Login" Size="Size.Large" Style="width:100px; height:100px;" />
+		<MudText Typo="Typo.h4" GutterBottom="true">Вход</MudText>
+		<MudText>Нет аккаунта? <MudLink Href="/createuser" Color="Color.Primary">Создайте его</MudLink></MudText>
+	</MudItem>
+
+	<MudItem xs="6">
+		<MudForm Model="@_signInModel" @ref="@Form">
+			<MudTextField @bind-Value="@_signInModel.Login" T="string" Label="Логин" Class="my-4"
+						  Validation="@_validator.ValidateValue()" For="@(() => _signInModel.Login)"
+						  AdornmentIcon="@Icons.Material.TwoTone.Person" AdornmentColor="Color.Warning"
+						  Adornment="Adornment.Start" Variant="Variant.Outlined" />
+
+			<MudTextField @bind-Value="@_signInModel.Password" Class="my-4"
+						  Validation="@_validator.ValidateValue()" For="@(() => _signInModel.Password)"
+						  Label="Пароль" InputType="@PasswordInput"
+						  AdornmentIcon="@PasswordInputIcon" AdornmentColor="Color.Secondary" Adornment="Adornment.Start"
+						  OnAdornmentClick="TogglePasswordVisibility" Variant="Variant.Outlined" />
+
+			<MudButton Class="mt-2"
+					   Size="Size.Large" Color="Color.Primary" Variant="Variant.Filled"
+					   FullWidth="true" OnClick="Submit">Войти</MudButton>
+		</MudForm>
+	</MudItem>
+</MudGrid>

@@ -1,0 +1,81 @@
+﻿@namespace Miralissa.Client.Pages
+@layout MainLayout
+@page "/"
+@using Miralissa.Client.Classes
+@using Miralissa.Shared
+@inherits ComponentBase
+
+
+<MudTable Items="@_subscripts" Hover="true" Striped="true" GroupBy="@GroupDefenition" Filter="SearchFunction" @ref="Table" MultiSelection="false">
+	<ToolBarContent>
+		<MudText Typo="Typo.h6">Выписки к проверке</MudText>
+		<MudSpacer />
+		<MudTextField @bind-Value="SearchString"
+					  Placeholder="Поиск"
+					  Adornment="Adornment.Start"
+					  AdornmentIcon="@Icons.Material.Filled.Search"
+					  IconSize="Size.Medium"
+					  Class="mt-0"></MudTextField>
+	</ToolBarContent>
+
+	<HeaderContent>
+		<MudTh>ID</MudTh>
+		<MudTh>
+			<MudTableSortLabel SortBy="SortFunction">
+				Результат
+			</MudTableSortLabel>
+			</MudTh>
+		<MudTh>Документ</MudTh>
+		<MudTh>Метка</MudTh>
+	</HeaderContent>
+
+	<GroupHeaderTemplate>
+		<MudTh Style="font-weight: bold" colspan="4">
+			<div class="d-flex justify-space-between">
+				@($"{context.GroupName}: {context.Key}")
+				<div>
+				</div>
+			</div>
+		</MudTh>
+	</GroupHeaderTemplate>
+
+	<RowTemplate>
+		<MudTd DataLabel="ID">@context.ID</MudTd>
+		<MudTd DataLabel="Result">
+			<MudChip DisableRipple="true" Color="@ColorizeResult(@context.Result)">@context.Result</MudChip>
+		</MudTd>
+		<MudTd DataLabel="html">
+			<MudIconButton Icon="@Icons.Custom.FileFormats.FileDocument" Color="Color.Info" Size="@Size.Large" OnClick="@(() => GetHtmlAsync(context.ID))" />
+		</MudTd>
+		<MudTd>
+			<MudToggleIconButton ToggledChanged="@(() => ChangeSelection(context))"
+								 Toggled="@_subscripts.First(x => x.ID == context.ID).IsChecked"
+								 Icon="@Icons.Material.Filled.RadioButtonUnchecked"
+								 ToggledIcon="@Icons.Material.Filled.RadioButtonChecked"
+								 ToggledColor="@Color.Success" />
+		</MudTd>
+	</RowTemplate>
+
+	<GroupFooterTemplate>
+		<MudTh colspan="5">
+			<MudTooltip Text="Готово">
+				<MudIconButton OnClick="@(() => MarkAsync(context.Items))"
+							   Size="Size.Small"
+							   Variant="Variant.Filled"
+							   Color="@Color.Success"
+							   Icon="@Icons.Material.Filled.DoneAll" />
+			</MudTooltip>
+			<MudTooltip Text="Сведения не найдены">
+				<MudIconButton OnClick="@(() => DeleteAsync(context.Items.First()))"
+							   Size="Size.Small"
+							   Variant="Variant.Filled"
+							   Color="@Color.Error"
+							   Icon="@Icons.Material.Filled.Cancel" />
+			</MudTooltip>
+		</MudTh>
+	</GroupFooterTemplate>
+
+	<PagerContent>
+		<MudTablePager />
+	</PagerContent>
+</MudTable>

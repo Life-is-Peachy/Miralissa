@@ -1,0 +1,81 @@
+﻿@namespace Miralissa.Client.Pages
+@layout ChallengeLayout
+@page "/createuser"
+@using FluentValidation
+@using Miralissa.Shared
+
+
+<div class="d-flex align-center flex-column">
+	<MudIcon Icon="@Icons.Material.Filled.AssignmentInd" Size="Size.Large" Style="width:100px; height:100px;" />
+	<MudText Typo="Typo.h4" GutterBottom="true">Регистрация</MudText>
+	<MudText>Уже зарегистрированны? <MudLink Href="signin" Color="Color.Primary">Выполните вход</MudLink></MudText>
+</div>
+
+<MudForm Model="@_CreateUserModel" @ref="@Form" Class="d-flex flex-row">
+	<MudItem xs="6" Class="mr-3">
+	<div>
+		<MudTextField @bind-Value="@_CreateUserModel.Credentials.Login" T="string" Label="Логин" Class="my-4"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Credentials.Login)"
+					  AdornmentIcon="@Icons.Material.TwoTone.Person" AdornmentColor="Color.Warning"
+					  Adornment="Adornment.Start" Variant="Variant.Outlined" />
+
+		<MudTextField @bind-Value="@_CreateUserModel.Credentials.Email" T="string" Label="E-mail" Class="my-4"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Credentials.Email)"
+					  AdornmentIcon="@Icons.Material.TwoTone.AlternateEmail" AdornmentColor="Color.Info"
+					  Adornment="Adornment.Start" Variant="Variant.Outlined" InputType="@InputType.Email" />
+
+		<MudTextField @bind-Value="@_CreateUserModel.Credentials.Password" Class="my-4"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Credentials.Password)"
+					  Label="Пароль" InputType="@PasswordInput"
+					  AdornmentIcon="@PasswordInputIcon" AdornmentColor="Color.Secondary" Adornment="Adornment.Start"
+					  OnAdornmentClick="TogglePasswordVisibility" Variant="Variant.Outlined" />
+
+		<MudDivider Class="my-4" DividerType="@DividerType.Middle" />
+
+		<MudTextField @bind-Value="@_CreateUserModel.Claims.Forename" T="string" Label="Имя" Class="my-4"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Claims.Forename)"
+					  AdornmentIcon="@Icons.Material.TwoTone.ShortText" AdornmentColor="Color.Default"
+					  Adornment="Adornment.Start" Variant="Variant.Outlined" />
+
+		<MudTextField @bind-Value="@_CreateUserModel.Claims.Surname" T="string" Label="Фамилия" Class="my-4"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Claims.Surname)"
+					  AdornmentIcon="@Icons.Material.TwoTone.ShortText" AdornmentColor="Color.Default"
+					  Adornment="Adornment.Start" Variant="Variant.Outlined" />
+
+		<MudTextField @bind-Value="@_CreateUserModel.Claims.Patronymic" T="string" Label="Отчество" Class="my-4"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Claims.Patronymic)"
+					  AdornmentIcon="@Icons.Material.TwoTone.ShortText" AdornmentColor="Color.Default"
+					  Adornment="Adornment.Start" Variant="Variant.Outlined" />
+	</div>
+	</MudItem>
+	<MudItem xs="6" Class="ml-3">
+	<div>
+		<MudTextField @bind-Value="@_CreateUserModel.Credentials.WorkPhone" T="string" Label="Рабочий телефон" Class="my-5"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Credentials.WorkPhone)"
+					  AdornmentIcon="@Icons.Material.TwoTone.LocalPhone" AdornmentColor="@Color.Success"
+					  Adornment="Adornment.Start" Variant="Variant.Text" InputType="@InputType.Telephone" />
+
+		<MudTextField @bind-Value="@_CreateUserModel.Claims.MobilePhone" T="string" Label="Личный телефон" Class="my-5"
+					  Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Claims.MobilePhone)"
+					  AdornmentIcon="@Icons.Material.TwoTone.Android" AdornmentColor="@Color.Success"
+					  Adornment="Adornment.Start" Variant="Variant.Text" InputType="@InputType.Telephone" />
+
+		<MudDatePicker @bind-Date="@_CreateUserModel.Claims.DateOfBirth" Label="Дата рождения" Class="my-5"
+					   Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Claims.DateOfBirth)"
+					   AdornmentIcon="@Icons.Material.TwoTone.Celebration" AdornmentColor="@Color.Error"
+					   Adornment="@Adornment.Start" OpenTo="OpenTo.Year" Color="Color.Error" />
+
+		<MudSelect @bind-Value="@_CreateUserModel.Claims.Gender" Label="Пол" Dense="true" Class="mt-6"
+				   Validation="@_Validator.ValidateValue()" For="@(() => _CreateUserModel.Claims.Gender)"
+				   AdornmentIcon="@Icons.Material.TwoTone.People" AdornmentColor="Color.Warning"
+				   Adornment="@Adornment.Start">
+			<MudSelectItem Value="@Gender.Мужчина" />
+			<MudSelectItem Value="@Gender.Женщина" />
+		</MudSelect>
+	</div>
+	</MudItem>
+</MudForm>
+
+<MudButton Class="my-5"
+		   Size="Size.Large" Color="Color.Primary" Variant="Variant.Filled"
+		   FullWidth="true" OnClick="Submit">Зарегистрироваться</MudButton>

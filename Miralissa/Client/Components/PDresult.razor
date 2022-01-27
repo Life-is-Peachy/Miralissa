@@ -1,0 +1,50 @@
+﻿<MudDialog Style="max-width: 100em;">
+	<DialogContent>
+		<MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="max-height: 55em; overflow-y: scroll">
+			<MudTable Items="PDs">
+				<HeaderContent>
+					@*	<MudTh>Коэф.</MudTh>*@
+					<MudTh tabindex="2">ФИО</MudTh>		//Без табиндекса нельзя выделять текст мышкой. Баг текущей версии в хроме. Должны пофиксить в будущих обновлениях мудблазора
+					<MudTh tabindex="2">Дата рождения</MudTh>
+					<MudTh tabindex="2">Место рождения</MudTh>
+					<MudTh tabindex="2">Номер паспорта</MudTh>
+					<MudTh tabindex="2">Серия</MudTh>
+					<MudTh tabindex="2">Выдан</MudTh>
+					<MudTh tabindex="2">Дата выдачи</MudTh>
+					<MudTh tabindex="2">СНИЛС</MudTh>
+					<MudTh tabindex="2">ИНН</MudTh>
+					<MudTh tabindex="2">Адресс</MudTh>
+				</HeaderContent>
+				<RowTemplate>
+					@*	<MudTd>@context.Rank</MudTd>*@
+					<MudTd tabindex="2">@context.FIO</MudTd>
+					<MudTd tabindex="2">@context.DateBirth?.ToString("dd.MM.yyyy")</MudTd>
+					<MudTd tabindex="2">@context.PlaceBirth</MudTd>
+					<MudTd tabindex="2">@context.PassNumber</MudTd>
+					<MudTd tabindex="2">@context.PassSeria</MudTd>
+					<MudTd tabindex="2">@context.PassIssueAddr</MudTd>
+					<MudTd tabindex="2">@context.PassIssueDate?.ToString("dd.MM.yyyy")</MudTd>
+					<MudTd tabindex="2">@context.SNILS</MudTd>
+					<MudTd tabindex="2">@context.INN</MudTd>
+					<MudTd tabindex="2">@context.Address</MudTd>
+				</RowTemplate>
+			</MudTable>
+		</MudContainer>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Ok">Понятно</MudButton>
+	</DialogActions>
+</MudDialog>
+
+
+@code {
+	[CascadingParameter] MudDialogInstance Dialog { get; set; }
+
+	[Parameter] public IEnumerable<Shared.PDelement> PDs { get; set; }
+
+
+	private void Ok()
+	{
+		Dialog.Close();
+	}
+}

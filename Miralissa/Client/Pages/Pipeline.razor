@@ -1,0 +1,120 @@
+﻿@namespace Miralissa.Client.Pages
+@layout MainLayout
+@page "/pipeline"
+@using Miralissa.Client.Classes
+@using Miralissa.Shared
+@inherits ComponentBase
+
+
+<MudTable Items="@_subscripts" Hover="true" Striped="true" GroupBy="@GroupDefenition" @ref="Table" Filter="SearchFunction">
+	<ToolBarContent>
+		<MudText Typo="Typo.h6">Periodic Elements</MudText>
+		<MudSpacer />
+		<MudTextField @bind-Value="SearchString"
+					  Placeholder="Search"
+					  Adornment="Adornment.Start"
+					  AdornmentIcon="@Icons.Material.Filled.Search"
+					  IconSize="Size.Medium"
+					  Class="mt-0"></MudTextField>
+	</ToolBarContent>
+
+	<HeaderContent>
+		<MudTh>ID</MudTh>
+		<MudTableSortLabel SortBy="SortFunction">
+	Результат
+</MudTableSortLabel>
+		<MudTh>Кадастровый</MudTh>
+		<MudTh>Адрес Росреестра</MudTh>
+	</HeaderContent>
+
+	<GroupHeaderTemplate>
+		<MudTh Style="font-weight: bold" colspan="5">
+			<div class="d-flex justify-space-between">
+				@($"{context.GroupName}: {context.Key}")
+				<div>
+				</div>
+			</div>
+		</MudTh>
+	</GroupHeaderTemplate>
+
+	<RowTemplate>
+		<MudTd DataLabel="ID">@context.ID</MudTd>
+		<MudTd DataLabel="Result">
+			<MudChip DisableRipple="true" Color="@ColorizeResult(@context.Result)">@context.Result</MudChip>
+		</MudTd>
+		<MudTd DataLabel="Cadastral">@context.CadastralNumber</MudTd>
+		<MudTd DataLabel="Address">
+			<MudText Typo="Typo.body1">@context.R_FullAddress</MudText>
+			@if (context.R_LiterBTI is not null || context.R_NumStoreys is not null)
+			{
+						<MudChip Label="true"
+					 Size="Size.Small"
+					 Color="Color.Info">
+							Литер: @context.R_LiterBTI.OnNullOrEmpty("-")  Этаж: @context.R_NumStoreys.OnNullOrEmpty("-")
+						</MudChip>
+			}
+			@if (context.R_FuncName is not null || @context.R_Status is not null)
+			{
+						<MudChip Label="true"
+					 Size="Size.Small"
+					 Color="Color.Warning">
+					@context.R_FuncName  @context.R_Status
+						</MudChip>
+			}
+			@if (@context.R_ObjType is not null || @context.R_Square is not null)
+			{
+						<MudChip Label="true"
+					 Size="Size.Small"
+					 Color="Color.Error">
+					@context.R_ObjType.OnNullOrEmpty("-")  площадью @context.R_Square.OnNullOrEmpty("-")
+						</MudChip>
+			}
+			@if (@context.R_CadastralCost is not null)
+			{
+						<MudChip Label="true"
+					 Size="Size.Small"
+					 Color="Color.Success">
+							Стоимость: @string.Format("{0:0,0.0}", @context.R_CadastralCost).OnNullOrEmpty("-")  От @context.R_CadastralCostDate.OnDateNull("-")  Обновленно @context.R_CadastralCostDate.OnDateNull("-")
+						</MudChip>
+			}
+		</MudTd>
+		<MudTd>
+			<MudToggleIconButton ToggledChanged="@(() => Select(context.ID))"
+								 Toggled="@_subscripts.First(x => x.ID == context.ID).IsChecked"
+								 Icon="@Icons.Material.Filled.RadioButtonUnchecked"
+								 ToggledIcon="@Icons.Material.Filled.RadioButtonChecked"
+								 ToggledColor="@Color.Success" />
+		</MudTd>
+	</RowTemplate>
+
+	<GroupFooterTemplate>
+		<MudTh colspan="5">
+			<MudTooltip Text="Готово">
+				<MudIconButton OnClick="@(() => MarkAsync(context.Items))"
+							   Size="Size.Small" Variant="Variant.Filled"
+							   Color="@Color.Success"
+							   Icon="@Icons.Material.Filled.DoneAll" />
+			</MudTooltip>
+			<MudTooltip Text="В ручную">
+				<MudIconButton OnClick="@(() => CreateAsync(context.Items.First()))"
+							   Size="Size.Small"
+							   Variant="Variant.Filled"
+							   Color="@Color.Info"
+							   Icon="@Icons.Material.Filled.Edit" />
+			</MudTooltip>
+			<MudTooltip Text="Сведения не найдены">
+				<MudIconButton OnClick="@(() => DeleteAsync(context.Items.First()))"
+							   Size="Size.Small"
+							   Variant="Variant.Filled"
+							   Color="@Color.Error"
+							   Icon="@Icons.Material.Filled.Cancel" />
+			</MudTooltip>
+		</MudTh>
+	</GroupFooterTemplate>
+
+	<PagerContent>
+		<MudTablePager />
+	</PagerContent>
+</MudTable>
+
+

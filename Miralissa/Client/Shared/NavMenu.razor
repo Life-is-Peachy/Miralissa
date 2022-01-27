@@ -1,0 +1,27 @@
+﻿@namespace Miralissa
+
+<MudPaper Width="250px" Class="py-3" Square="true">
+    <MudNavMenu>
+        <MudText Typo="Typo.h6" Class="px-4">Конвеер выписок</MudText>
+        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Этапы</MudText>
+
+        <MudDivider Class="my-2"/>
+
+        <MudNavGroup Title="Этапы">
+            <MudNavLink Href="/pipeline">Подготовка</MudNavLink>
+            <MudNavLink Href="/">Проверка</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudPaper>
+
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

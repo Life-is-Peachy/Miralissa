@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Store\**" />
+    <Content Remove="Store\**" />
+    <EmbeddedResource Remove="Store\**" />
+    <None Remove="Store\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.FluentValidation" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.10" PrivateAssets="all" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="MudBlazor" Version="5.1.5" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Miralissa.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,66 @@
+﻿@namespace Miralissa
+@using Miralissa.Client.Classes
+@using Miralissa.Client.Components
+@inherits LayoutComponentBase
+
+<MudSnackbarProvider />
+<MudThemeProvider Theme="_CurrentTheme" />
+<MudDialogProvider />
+
+<MudLayout>
+	<MudAppBar Elevation="1" Color="Color.Error">
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+		<MudText Typo="Typo.h5" Class="ml-3">Title</MudText>
+		<MudSpacer />
+		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+	</MudAppBar>
+
+	<MudDrawer @bind-Open="_drawerOpen" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Always" Elevation="2">
+		<MudNavMenu>
+			<MudNavLink Match="NavLinkMatch.All" Href="/pipeline" Icon="@Icons.Filled.Group">Подготовка</MudNavLink>
+			<MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Filled.Group">Проверка</MudNavLink>
+			<MudNavLink Match="NavLinkMatch.All" OnClick="OpenPDdialog" Icon="@Icons.Filled.Group">ПД</MudNavLink>
+		</MudNavMenu>
+	</MudDrawer>
+
+	<MudMainContent Class="px-5 my-5">
+		@Body
+	</MudMainContent>
+</MudLayout>
+
+
+@code {
+    MudTheme _CurrentTheme = new Theme();
+    bool _drawerOpen = true;
+
+    [Inject] public HttpClient HttpClient { get; private set; }
+    [Inject] public IDialogService DialogService { get; private set; }
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    async Task OpenPDdialog()
+    {
+        var dialog = DialogService.Show<PDdialog>("Персональные данные");
+        var result = await dialog.Result;
+
+        if (result.Cancelled) return;
+
+        Shared.PDmodel pd = result.Data.As<Shared.PDmodel>();
+
+        if (pd.FIO.IsNullOrEmpty() && pd.Address.IsNullOrEmpty()) return;
+
+        ShowPDresult(pd);
+    }
+
+    async Task ShowPDresult(Shared.PDmodel pd)
+    {
+        var personalData = await HttpClient.GetFromJsonAsync<IEnumerable<Shared.PDelement>>($"api/person/Get/{pd.FIO ?? "привет"}&{pd.Address ?? "я костыль"}");    //Если в контролер послать налы или пустые строки он на них не среагирует. Нужно разобраться как правильно писать патерны роутинга
+
+        var parameter = new DialogParameters { ["PDs"] = personalData };
+        var dialog = DialogService.Show<PDresult>("Персональные данные", parameter, new DialogOptions { FullWidth = true, CloseButton = true });
+        await dialog.Result;
+    }
+}

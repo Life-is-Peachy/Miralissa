@@ -1,0 +1,30 @@
+﻿<MudDialog>
+	<DialogContent>
+		<MudTextField @bind-Value="_name" Label="Имя" Variant="Variant.Text" />
+		<MudTextField @bind-Value="_address" Label="Адрес" Variant="Variant.Text" Lines="5" />
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">Отмена</MudButton>
+		<MudButton OnClick="Ok">Принять</MudButton>
+	</DialogActions>
+</MudDialog>
+
+
+@code {
+    string _name;
+    string _address;
+
+    [CascadingParameter] MudDialogInstance Dialog { get; set; }
+
+
+    void Cancel()
+    {
+        Dialog.Cancel();
+    }
+
+    void Ok()
+    {
+        Shared.PDmodel pd = new(_name, _address);
+        Dialog.Close(DialogResult.Ok(pd));
+	}
+}
